@@ -1,5 +1,6 @@
-/*
- *
+/*  6 10 14 18
+ * 1 7 17 31
+   2n * n - 1
  * Make sure to see the more detailed description of
  * StdDraw at: http://introcs.cs.princeton.edu/java/15inout/
  *
@@ -108,7 +109,7 @@ public class StdDrawDemo {
 		/** Try commenting out some of these calls and
 		* notice the differences. */
 		drawThree();
-		//drawRandom();
-		//drawZoom();
+		drawRandom();
+		drawZoom();
 	}
 }

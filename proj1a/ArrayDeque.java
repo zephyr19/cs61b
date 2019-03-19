@@ -56,6 +56,7 @@ public class ArrayDeque<T> {
                 System.arraycopy(items, prevNextFirst + 1,
                         newItems, nextFirst + 1, prevLen - 1 - prevNextFirst);
             }
+            items = newItems;
         }
     }
 
@@ -78,6 +79,7 @@ public class ArrayDeque<T> {
                 System.arraycopy(items, prevNextFirst + 1,
                         newItems, nextFirst + 1, prevLen - 1 - prevNextFirst);
             }
+            items = newItems;
         }
     }
 

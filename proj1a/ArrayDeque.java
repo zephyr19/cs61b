@@ -24,13 +24,11 @@ public class ArrayDeque<T> {
 		items = (T[]) new Object[len];
 		if (nextFirst == nextLast) {
 			System.arraycopy(other.items, 0, items, 0, len);
-		}
-		else if (nextFirst < nextLast) {
-			System.arraycopy(other.items, nextFirst+1, items, nextFirst+1, nextLast-nextFirst-2);
-		}
-		else {
+		} else if (nextFirst < nextLast) {
+			System.arraycopy(other.items, nextFirst + 1, items, nextFirst + 1, nextLast - nextFirst - 2);
+		} else {
 			System.arraycopy(other.items, 0, items, 0, nextLast);
-			System.arraycopy(other.items, nextFirst+1, items, nextFirst+1, len-1-nextFirst);
+			System.arraycopy(other.items, nextFirst + 1, items, nextFirst + 1, len - 1 - nextFirst);
 		}
 	}
 
@@ -41,13 +39,12 @@ public class ArrayDeque<T> {
 			len = len / 2 * 3;
 			T[] newItems = (T[]) new Object[len];
 			if (nextFirst < nextLast) {
-				System.arraycopy(items, nextFirst+1, newItems, nextFirst+1, nextLast-nextFirst-2);
-			}
-			else {
+				System.arraycopy(items, nextFirst + 1, newItems, nextFirst + 1, nextLast - nextFirst - 2);
+			} else {
 				System.arraycopy(items, 0, newItems, 0, nextLast);
 				int prevNextFirst = nextFirst;
 				nextFirst = len - prevLen + 1 + nextFirst;
-				System.arraycopy(items, prevNextFirst+1, newItems, nextFirst+1, prevLen-1-prevNextFirst);
+				System.arraycopy(items, prevNextFirst + 1, newItems, nextFirst + 1, prevLen - 1 - prevNextFirst);
 			}
 		}
 	}
@@ -59,15 +56,14 @@ public class ArrayDeque<T> {
 			len = len * 2 / 3;
 			T[] newItems = (T[]) new Object[len];
 			if (nextFirst < nextLast) {
-				System.arraycopy(items, nextFirst+1, newItems, 1, nextLast-nextFirst-2);
+				System.arraycopy(items, nextFirst + 1, newItems, 1, nextLast - nextFirst - 2);
 				nextLast  = nextLast - nextFirst - 1;
 				nextFirst = 0;
-			}
-			else {
+			} else {
 				System.arraycopy(items, 0, newItems, 0, nextLast);
 				int prevNextFirst = nextFirst;
 				nextFirst = len - prevLen + prevNextFirst;
-				System.arraycopy(items, prevNextFirst+1, newItems, nextFirst+1, prevLen-1-prevNextFirst);
+				System.arraycopy(items, prevNextFirst + 1, newItems, nextFirst + 1, prevLen - 1 - prevNextFirst);
 			}
 		}
 	}
@@ -78,8 +74,7 @@ public class ArrayDeque<T> {
 		items[nextFirst] = item;
 		if (nextFirst == 0) {
 			nextFirst = len - 1;
-		}
-		else {
+		} else {
 			nextFirst--;
 		}
 		size++;
@@ -89,17 +84,16 @@ public class ArrayDeque<T> {
 	public void addLast(T item) {
 		isExpandList();
 		items[nextLast] = item;
-		if (nextLast == len-1) {
+		if (nextLast == len - 1) {
 			nextLast = 0;
-		}
-		else {
+		} else {
 			nextLast++;
 		}
 		size++;
 	}
 
 	/** Returns true if the deque is empty. */
-	private boolean isEmpty() {
+	public boolean isEmpty() {
 		if (size == 0) {
 			return true;
 		}
@@ -117,7 +111,7 @@ public class ArrayDeque<T> {
 		if (index == len) {
 			index = 0;
 		}
-		while (index != nextLast-1) {
+		while (index != nextLast - 1) {
 			if (index == len) {
 				index = 0;
 			}
@@ -133,14 +127,12 @@ public class ArrayDeque<T> {
 			if (isEmpty()) {
 				return null;
 			}
-		}
-		else {
+		} else {
 			isShrinkList();
 		}
-		if (nextFirst == len-1) {
+		if (nextFirst == len - 1) {
 			nextFirst = 0;
-		}
-		else {
+		} else {
 			nextFirst++;
 		}
 		T res = items[nextFirst];
@@ -154,14 +146,12 @@ public class ArrayDeque<T> {
 			if (isEmpty()) {
 				return null;
 			}
-		}
-		else {
+		} else {
 			isShrinkList();
 		}
 		if (nextLast == 0) {
 			nextLast = len - 1;
-		}
-		else {
+		} else {
 			nextLast--;
 		}
 		T res = items[nextLast];
@@ -173,20 +163,15 @@ public class ArrayDeque<T> {
 	 *  If no such item exists, returns null.
 	 */
 	public T get(int index) {
-		if (index > size-1) {
+		if (index > size - 1) {
 			return null;
 		}
 		int i = nextFirst + index + 1;
 		if (i <= len-1) {
 			return items[i];
-		}
-		else {
+		} else {
 			i -= len;
 			return items[i];
 		}
-	}
-
-	public static void main(String[] args) {
-
 	}
 }

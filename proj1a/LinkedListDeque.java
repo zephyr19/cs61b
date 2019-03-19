@@ -19,7 +19,7 @@ public class LinkedListDeque<T> {
 			if (index == 0) {
 				return this.item;
 			}
-			return this.next.getRecursiveHelper(index-1);
+			return this.next.getRecursiveHelper(index - 1);
 		}
 	}
 
@@ -32,15 +32,8 @@ public class LinkedListDeque<T> {
 		size = 0;
 	}
 
-	public LinkedListDeque(T i) {
-		sentinel = new TNode();
-		sentinel.next = new TNode(i, sentinel, sentinel);
-		sentinel.prev = sentinel.next;
-		size = 1;
-	}
-
 	/** Creates a deep copy of the other. */
-	public LinkedListDeque(LinkedListDeque<T> other) {
+	public LinkedListDeque(LinkedListDeque other) {
 		size = 0;
 		sentinel = new TNode();
 		TNode otherNode = other.sentinel.next;
@@ -123,9 +116,5 @@ public class LinkedListDeque<T> {
 	/** Gets the item at the given index in a recursive way. */
 	public T getRecursive(int index) {
 		return  sentinel.next.getRecursiveHelper(index);
-	}
-
-	public static void main(String[] args) {
-
 	}
 }

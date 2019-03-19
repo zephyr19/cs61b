@@ -42,7 +42,7 @@ public class ArrayDeque<T> {
      * Resize the deque to a Two-thirds space.
      */
     private void isExpandList() {
-        if (size > len * 0.9) {
+        if (size > len * 0.8) {
             int prevLen = len;
             len = len / 2 * 3;
             T[] newItems = (T[]) new Object[len];
@@ -52,9 +52,13 @@ public class ArrayDeque<T> {
             } else {
                 System.arraycopy(items, 0, newItems, 0, nextLast);
                 int prevNextFirst = nextFirst;
-                nextFirst = len - prevLen + 1 + nextFirst;
+                nextFirst = len - prevLen + nextFirst;
+                int destPos = nextFirst + 1;
+                if (nextFirst == len - 1) {
+                    destPos = 0;
+                }
                 System.arraycopy(items, prevNextFirst + 1,
-                        newItems, nextFirst + 1, prevLen - 1 - prevNextFirst);
+                        newItems, destPos, prevLen - 1 - prevNextFirst);
             }
             items = newItems;
         }
@@ -66,11 +70,17 @@ public class ArrayDeque<T> {
     private void isShrinkList() {
         if (len * 2 / 3 > size) {
             int prevLen = len;
-            len = len * 2 / 3;
+            len = len * 2 / 3 + 2;
             T[] newItems = (T[]) new Object[len];
             if (nextFirst < nextLast) {
-                System.arraycopy(items, nextFirst + 1, newItems, 1, nextLast - nextFirst - 2);
+                System.arraycopy(items, nextFirst + 1, newItems, 1, nextLast - nextFirst - 1);
                 nextLast = nextLast - nextFirst - 1;
+                if (nextLast == len - 1) {
+                    nextLast = 0;
+                }
+                else {
+                    nextLast++;
+                }
                 nextFirst = 0;
             } else {
                 System.arraycopy(items, 0, newItems, 0, nextLast);
@@ -204,6 +214,16 @@ public class ArrayDeque<T> {
         } else {
             i -= len;
             return items[i];
+        }
+    }
+
+    public static void main(String[] args) {
+        ArrayDeque<Integer> L = new ArrayDeque<>();
+        for (int i = 0; i < 100; i++) {
+            L.addLast(i);
+        }
+        for (int i = 0; i < 99; i++) {
+            L.removeFirst();
         }
     }
 }

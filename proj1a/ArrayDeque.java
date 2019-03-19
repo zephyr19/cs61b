@@ -77,8 +77,7 @@ public class ArrayDeque<T> {
                 nextLast = nextLast - nextFirst - 1;
                 if (nextLast == len - 1) {
                     nextLast = 0;
-                }
-                else {
+                } else {
                     nextLast++;
                 }
                 nextFirst = 0;
@@ -214,16 +213,6 @@ public class ArrayDeque<T> {
         } else {
             i -= len;
             return items[i];
-        }
-    }
-
-    public static void main(String[] args) {
-        ArrayDeque<Integer> L = new ArrayDeque<>();
-        for (int i = 0; i < 100; i++) {
-            L.addLast(i);
-        }
-        for (int i = 0; i < 99; i++) {
-            L.removeFirst();
         }
     }
 }

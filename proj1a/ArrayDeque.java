@@ -171,6 +171,7 @@ public class ArrayDeque<T> {
             nextFirst++;
         }
         T res = items[nextFirst];
+        items[nextFirst] = null;
         size--;
         return res;
     }
@@ -193,6 +194,7 @@ public class ArrayDeque<T> {
             nextLast--;
         }
         T res = items[nextLast];
+        items[nextLast] = null;
         size--;
         return res;
     }

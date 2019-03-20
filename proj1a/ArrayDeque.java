@@ -48,17 +48,15 @@ public class ArrayDeque<T> {
             T[] newItems = (T[]) new Object[len];
             if (nextFirst < nextLast) {
                 System.arraycopy(items, nextFirst + 1,
-                        newItems, nextFirst + 1, nextLast - nextFirst - 2);
+                        newItems, nextFirst + 1, nextLast - nextFirst - 1);
             } else {
                 System.arraycopy(items, 0, newItems, 0, nextLast);
                 int prevNextFirst = nextFirst;
                 nextFirst = len - prevLen + nextFirst;
-                int destPos = nextFirst + 1;
-                if (nextFirst == len - 1) {
-                    destPos = 0;
+                if (prevLen - 1 != prevNextFirst) {
+                    System.arraycopy(items, prevNextFirst + 1,
+                            newItems, nextFirst + 1, prevLen - 1 - prevNextFirst);
                 }
-                System.arraycopy(items, prevNextFirst + 1,
-                        newItems, destPos, prevLen - 1 - prevNextFirst);
             }
             items = newItems;
         }
@@ -74,12 +72,7 @@ public class ArrayDeque<T> {
             T[] newItems = (T[]) new Object[len];
             if (nextFirst < nextLast) {
                 System.arraycopy(items, nextFirst + 1, newItems, 1, nextLast - nextFirst - 1);
-                nextLast = nextLast - nextFirst - 1;
-                if (nextLast == len - 1) {
-                    nextLast = 0;
-                } else {
-                    nextLast++;
-                }
+                nextLast = nextLast - nextFirst;
                 nextFirst = 0;
             } else {
                 System.arraycopy(items, 0, newItems, 0, nextLast);

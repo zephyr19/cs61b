@@ -30,7 +30,7 @@ public class ArrayDeque<T> {
             System.arraycopy(other.items, 0, items, 0, len);
         } else if (nextFirst < nextLast) {
             System.arraycopy(other.items, nextFirst + 1,
-                    items, nextFirst + 1, nextLast - nextFirst - 2);
+                    items, nextFirst + 1, nextLast - nextFirst - 1);
         } else {
             System.arraycopy(other.items, 0, items, 0, nextLast);
             System.arraycopy(other.items, nextFirst + 1,
@@ -42,9 +42,9 @@ public class ArrayDeque<T> {
      * Resize the deque to a Two-thirds space.
      */
     private void isExpandList() {
-        if (size > len * 0.8) {
+        if (size > len * 0.75) {
             int prevLen = len;
-            len = len / 2 * 3;
+            len = len * 2;
             T[] newItems = (T[]) new Object[len];
             if (nextFirst < nextLast) {
                 System.arraycopy(items, nextFirst + 1,
@@ -66,13 +66,18 @@ public class ArrayDeque<T> {
      * Resize the deque to a half space.
      */
     private void isShrinkList() {
-        if (len * 2 / 3 > size) {
+        if (len * 0.2 > size) {
             int prevLen = len;
-            len = len * 2 / 3 + 4;
+            len = len / 2;
             T[] newItems = (T[]) new Object[len];
             if (nextFirst < nextLast) {
                 System.arraycopy(items, nextFirst + 1, newItems, 1, nextLast - nextFirst - 1);
                 nextLast = nextLast - nextFirst;
+                if (nextLast == len - 1) {
+                    nextLast = 0;
+                } else {
+                    nextLast++;
+                }
                 nextFirst = 0;
             } else {
                 System.arraycopy(items, 0, newItems, 0, nextLast);

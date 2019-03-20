@@ -70,7 +70,7 @@ public class ArrayDeque<T> {
     private void isShrinkList() {
         if (len * 2 / 3 > size) {
             int prevLen = len;
-            len = len * 2 / 3 + 2;
+            len = len * 2 / 3 + 4;
             T[] newItems = (T[]) new Object[len];
             if (nextFirst < nextLast) {
                 System.arraycopy(items, nextFirst + 1, newItems, 1, nextLast - nextFirst - 1);

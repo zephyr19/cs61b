@@ -84,11 +84,15 @@ public class IntList {
         //TODO:  fill in method
         // non recursive implements
         IntList p = A;
-        while (p.rest != null) {
-            p = p.rest;
+        if (p != null) {
+            while (p.rest != null) {
+                p = p.rest;
+            }
+            p.rest = B;
+            return A;
+        } else {
+            return B;
         }
-        p.rest = B;
-        return A;
 
         // recursive implements
         // unsovled!!

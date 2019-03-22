@@ -1,5 +1,9 @@
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
 public class HorribleSteve {
-    public static void main(String [] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         int i = 0;
         for (int j = 0; i < 500; ++i, ++j) {
             if (!Flik.isSameNumber(i, j)) {
@@ -8,5 +12,13 @@ public class HorribleSteve {
             }
         }
         System.out.println("i is " + i);
+    }
+
+    @Test
+    public void testIsSameNumber() {
+        int a = 0;
+        for (int b = 0; b < 500; a++, b++) {
+            assertTrue(Flik.isSameNumber(a, b));
+        }
     }
 }

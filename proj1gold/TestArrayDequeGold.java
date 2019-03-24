@@ -7,17 +7,15 @@ public class TestArrayDequeGold {
     public void randomlyCall() {
         StudentArrayDeque<Integer> sad1 = new StudentArrayDeque<>();
         ArrayDequeSolution<Integer> sol1 = new ArrayDequeSolution<>();
-        for (int j = 0; j < 120; j++) {
-            for (Integer i = 0; i < 100; i += 1) {
-                double numberBetweenZeroAndOne = StdRandom.uniform();
+        for (int i = 0; i < 12000; i += 1) {
+            double numberBetweenZeroAndOne = StdRandom.uniform();
 
-                if (numberBetweenZeroAndOne < 0.5) {
-                    sad1.addLast(i);
-                    sol1.addLast(i);
-                } else {
-                    sad1.addFirst(i);
-                    sol1.addFirst(i);
-                }
+            if (numberBetweenZeroAndOne < 0.5) {
+                sad1.addLast(i);
+                sol1.addLast(i);
+            } else {
+                sad1.addFirst(i);
+                sol1.addFirst(i);
             }
         }
         String[] errorMessage = new String[2];

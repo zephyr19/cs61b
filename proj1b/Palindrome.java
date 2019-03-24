@@ -23,7 +23,7 @@ public class Palindrome {
         return isPalindromeHelper(L);
     }
 
-    public boolean isPalindromeHelper(Deque L) {
+    private boolean isPalindromeHelper(Deque L) {
         if (L.size() == 0 || L.size() == 1) {
             return true;
         }
@@ -39,7 +39,7 @@ public class Palindrome {
         return isPalindromeHelper(L, cc);
     }
 
-    public boolean isPalindromeHelper(Deque<Character> L, CharacterComparator cc) {
+    private boolean isPalindromeHelper(Deque<Character> L, CharacterComparator cc) {
         if (L.size() == 0 || L.size() == 1) {
             return true;
         }

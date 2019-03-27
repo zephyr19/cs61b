@@ -12,9 +12,14 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
     private int fillCount;
     /* Array for storing the buffer data. */
     private T[] rb;
-    private int len;
 
     private class ArraySetIterator implements Iterator<T> {
+        int index;
+
+        private ArraySetIterator(int i) {
+            index = i;
+        }
+
         @Override
         public boolean hasNext() {
             return fillCount != 0;
@@ -22,7 +27,12 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
 
         @Override
         public T next() {
-            return dequeue();
+            T res = rb[index];
+            index++;
+            if (index == capacity()) {
+                index = 0;
+            }
+            return res;
         }
     }
 
@@ -34,7 +44,6 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         first = 0;
         last = 0;
         fillCount = 0;
-        len = capacity;
     }
 
     /**
@@ -102,7 +111,7 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new ArraySetIterator();
+        return new ArraySetIterator(first);
     }
 
     @Override

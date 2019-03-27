@@ -48,10 +48,9 @@ public class Clorus extends Creature {
         Deque<Direction> emptyPosition = new ArrayDeque<>();
         Deque<Direction> plopPosition = new ArrayDeque<>();
         for (Direction key : neighbors.keySet()) {
-            //String direction = neighbors.get(key).name();
             if (neighbors.get(key).name().equals("empty")) {
                 emptyPosition.addFirst(key);
-            } else {
+            } else if (neighbors.get(key).color().equals(color(34, 0, 231))){
                 plopPosition.addFirst(key);
             }
         }

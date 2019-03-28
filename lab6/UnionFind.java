@@ -61,6 +61,9 @@ public class UnionFind {
             root = n;
             n = parent(n);
         }
+        if (parent(v1) < 0) {
+            return root;
+        }
         int otherRoot = root;
         while (parent(v1) != root) {
             int m = parent(v1), firstNode = v1;

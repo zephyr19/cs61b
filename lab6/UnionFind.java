@@ -82,5 +82,17 @@ public class UnionFind {
         }
         return root;
     }
-
+//    public static void main(String[] args) {
+//        UnionFind array = new UnionFind(16);
+//        array.union(1, 2);
+//        array.union(3, 4);
+//        array.union(5, 0);
+//        array.union(2, 3);
+//        array.union(3, 5);
+//        array.union(7, 8);
+//        array.union(9, 10);
+//        array.union(7, 9);
+//        array.union(7, 4);
+//        array.find(7);
+//    }
 }

@@ -62,18 +62,18 @@ public class UnionFind {
        allowing for fast search-time. */
     public int find(int v1) {
         validate(v1);
+        if (parent(v1) < 0) {
+            return v1;
+        }
         int n = parent(v1), root = v1;
         while (n >= 0) {
             root = n;
             n = parent(n);
         }
-        if (parent(v1) < 0) {
-            return root;
-        }
         int otherRoot = root;
         while (parent(v1) != root) {
             int m = parent(v1), firstNode = v1;
-            while (m == otherRoot) {
+            while (m != otherRoot) {
                 firstNode = m;
                 m = parent(m);
             }

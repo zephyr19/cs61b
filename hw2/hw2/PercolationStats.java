@@ -28,12 +28,13 @@ public class PercolationStats {
             totalSites += j;
             sites[i] = j;
         }
-        mean = (double) totalSites / T / N / N;
+        int divider = N * N;
+        mean = (double) totalSites / T / divider;
         int sum = 0;
         for (int site : sites) {
             sum += Math.pow(site - mean, 2);
         }
-        stddev = Math.sqrt((double) sum / (T - 1) / N / N);
+        stddev = Math.sqrt((double) sum / (T - 1) / divider / divider);
     }
 
     /**

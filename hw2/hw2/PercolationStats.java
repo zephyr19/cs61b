@@ -7,7 +7,9 @@ public class PercolationStats {
     private double mean;
     private double stddev;
 
-    /** perform T independent experiments on an N-by-N grid. */
+    /**
+     * perform T independent experiments on an N-by-N grid.
+     */
     public PercolationStats(int N, int T, PercolationFactory pf) {
         if (N <= 0 || T <= 0) {
             throw new java.lang.IllegalArgumentException();
@@ -32,22 +34,30 @@ public class PercolationStats {
         stddev = Math.sqrt((double) sum / (sites.length - 1));
     }
 
-    /** sample mean of percolation threshold. */
+    /**
+     * sample mean of percolation threshold.
+     */
     public double mean() {
         return mean;
     }
 
-    /** sample standard deviation of percolation threshold. */
+    /**
+     * sample standard deviation of percolation threshold.
+     */
     public double stddev() {
         return stddev;
     }
 
-    /** low endpoint of 95% confidence interval. */
+    /**
+     * low endpoint of 95% confidence interval.
+     */
     public double confidenceLow() {
         return mean - 1.96 * stddev / Math.sqrt(sites.length);
     }
 
-    /** high endpoint of 95% confidence interval. */
+    /**
+     * high endpoint of 95% confidence interval.
+     */
     public double confidenceHigh() {
         return mean + 1.96 * stddev / Math.sqrt(sites.length);
     }

@@ -18,20 +18,22 @@ public class PercolationStats {
         int totalSites = 0;
         for (int i = 0; i < T; i++) {
             Percolation percolation = pf.make(N);
-            for (int j = 1; !percolation.percolates(); j++) {
+            int j;
+            for (j = 1; !percolation.percolates(); j++) {
                 while (percolation.numberOfOpenSites() != j) {
                     percolation.open(StdRandom.uniform(N), StdRandom.uniform(N));
                 }
-                totalSites += j;
-                sites[i] = j;
             }
+            j--;
+            totalSites += j;
+            sites[i] = j;
         }
         mean = (double) totalSites / T;
         int sum = 0;
         for (int site : sites) {
             sum += Math.pow(site - mean, 2);
         }
-        stddev = Math.sqrt((double) sum / (sites.length - 1));
+        stddev = Math.sqrt((double) sum / (T - 1));
     }
 
     /**

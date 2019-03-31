@@ -6,6 +6,7 @@ public class Percolation {
     private int[][] grid;
     private int openSites;
     private WeightedQuickUnionUF unionUF;
+    private int sizeForUnion;
 
     /**
      * create N-by-N grid, with all sites initially blocked.
@@ -13,7 +14,8 @@ public class Percolation {
     public Percolation(int N) {
         grid = new int[N][N];
         openSites = 0;
-        unionUF = new WeightedQuickUnionUF(N * N);
+        sizeForUnion = N * N;
+        unionUF = new WeightedQuickUnionUF(sizeForUnion + 1);
     }
 
     /**
@@ -58,6 +60,8 @@ public class Percolation {
                         unionUF.union(position, position - 1);
                     }
                 }
+            } else {
+                unionUF.union(position, sizeForUnion);
             }
         }
     }
@@ -88,8 +92,7 @@ public class Percolation {
      */
     public boolean isFull(int row, int col) {
         checkForRowCol(row, col);
-        int root = unionUF.find(row * grid.length + col);
-        return root >= 0 && root < grid.length;
+        return unionUF.connected(row * grid.length + col, sizeForUnion);
     }
 
     /**

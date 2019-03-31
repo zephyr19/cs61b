@@ -132,7 +132,7 @@ public class Percolation {
      * does the system percolate?
      */
     public boolean percolates() {
-        return unionUF.connected(sizeForUnion, sizeForUnion + 1);
+        return unionUF.connected(sizeForUnion, sizeForUnion);
     }
 
     /**

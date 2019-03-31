@@ -16,6 +16,7 @@ public class PercolationStats {
         }
         sites = new int[T];
         int totalSites = 0;
+        int divider = N * N;
         for (int i = 0; i < T; i++) {
             Percolation percolation = pf.make(N);
             int j;
@@ -25,16 +26,15 @@ public class PercolationStats {
                 }
             }
             j--;
-            totalSites += j;
-            sites[i] = j;
+            sites[i] = j / divider;
+            totalSites += sites[i];
         }
-        int divider = N * N;
-        mean = (double) totalSites / T / divider;
+        mean = (double) totalSites / T;
         int sum = 0;
         for (int site : sites) {
             sum += Math.pow(site - mean, 2);
         }
-        stddev = Math.sqrt((double) sum / (T - 1) / divider / divider);
+        stddev = Math.sqrt((double) sum / (T - 1));
     }
 
     /**

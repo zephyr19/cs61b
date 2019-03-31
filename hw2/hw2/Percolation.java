@@ -93,7 +93,7 @@ public class Percolation {
      */
     public boolean isFull(int row, int col) {
         checkForRowCol(row, col);
-        return unionUF.find(row * grid.length + col) == sizeForUnion;
+        return unionUF.connected(row * grid.length + col, sizeForUnion);
     }
 
     /**

@@ -7,7 +7,7 @@ public class Percolation {
     private int openSites;
     private WeightedQuickUnionUF unionUF;
     private int sizeForUnion;
-    private boolean isPercolates;
+//    private boolean isPercolates;
 
     /**
      * create N-by-N grid, with all sites initially blocked.
@@ -46,10 +46,6 @@ public class Percolation {
                         if (isOpenWithoutChecking(row + 1, col)) {
                             unionUF.union(position, position + grid.length);
                         }
-                    } else {
-                        if (isFull(row,col)) {
-                            isPercolates = true;
-                        }
                     }
                 } else if (row != 0) {
                     if (isOpenWithoutChecking(row - 1, col)) {
@@ -58,10 +54,6 @@ public class Percolation {
                     if (row != border) {
                         if (isOpenWithoutChecking(row + 1, col)) {
                             unionUF.union(position, position + grid.length);
-                        }
-                    } else {
-                        if (isFull(row,col)) {
-                            isPercolates = true;
                         }
                     }
                     if (col == 0) {
@@ -122,7 +114,15 @@ public class Percolation {
      * does the system percolate?
      */
     public boolean percolates() {
-        return isPercolates;
+        int i = grid.length - 1;
+        for (int j = 0; j < grid.length; j++) {
+            if (isOpenWithoutChecking(i, j)) {
+                if (unionUF.connected(i * grid.length + j, sizeForUnion)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

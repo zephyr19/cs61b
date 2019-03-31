@@ -3,7 +3,7 @@ package hw2;
 import edu.princeton.cs.introcs.StdRandom;
 
 public class PercolationStats {
-    private int[] sites;
+    private double[] sites;
     private double mean;
     private double stddev;
 
@@ -14,8 +14,8 @@ public class PercolationStats {
         if (N <= 0 || T <= 0) {
             throw new java.lang.IllegalArgumentException();
         }
-        sites = new int[T];
-        int totalSites = 0;
+        sites = new double[T];
+        double totalSites = 0;
         int divider = N * N;
         for (int i = 0; i < T; i++) {
             Percolation percolation = pf.make(N);
@@ -26,15 +26,15 @@ public class PercolationStats {
                 }
             }
             j--;
-            sites[i] = j / divider;
+            sites[i] = (double) j / divider;
             totalSites += sites[i];
         }
         mean = (double) totalSites / T;
-        int sum = 0;
-        for (int site : sites) {
+        double sum = 0;
+        for (double site : sites) {
             sum += Math.pow(site - mean, 2);
         }
-        stddev = Math.sqrt((double) sum / (T - 1));
+        stddev = Math.sqrt(sum / (T - 1));
     }
 
     /**

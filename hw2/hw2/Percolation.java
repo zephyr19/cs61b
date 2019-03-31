@@ -83,7 +83,7 @@ public class Percolation {
         if (row >= grid.length || col >= grid.length) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        if (row < 0 || col <= 0) {
+        if (row < 0 || col < 0) {
             throw new java.lang.IllegalArgumentException();
         }
     }

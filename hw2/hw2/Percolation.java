@@ -7,6 +7,7 @@ public class Percolation {
     private int openSites;
     private WeightedQuickUnionUF unionUF;
     private int sizeForUnion;
+    private boolean isPercolates;
 
     /**
      * create N-by-N grid, with all sites initially blocked.
@@ -30,7 +31,7 @@ public class Percolation {
             int position = row * grid.length + col;
             int border = grid.length - 1;
             openSites++;
-            if(grid.length != 1) {
+            if (grid.length != 1) {
                 if (row != 0 && col != 0 && col != border) {
                     if (isOpenWithoutChecking(row, col + 1)) {
                         unionUF.union(position, position + 1);
@@ -45,6 +46,10 @@ public class Percolation {
                         if (isOpenWithoutChecking(row + 1, col)) {
                             unionUF.union(position, position + grid.length);
                         }
+                    } else {
+                        if (isFull(row,col)) {
+                            isPercolates = true;
+                        }
                     }
                 } else if (row != 0) {
                     if (isOpenWithoutChecking(row - 1, col)) {
@@ -53,6 +58,10 @@ public class Percolation {
                     if (row != border) {
                         if (isOpenWithoutChecking(row + 1, col)) {
                             unionUF.union(position, position + grid.length);
+                        }
+                    } else {
+                        if (isFull(row,col)) {
+                            isPercolates = true;
                         }
                     }
                     if (col == 0) {
@@ -70,6 +79,8 @@ public class Percolation {
                         unionUF.union(position, position + grid.length);
                     }
                 }
+            } else {
+                unionUF.union(position, sizeForUnion);
             }
         }
     }
@@ -87,11 +98,8 @@ public class Percolation {
     }
 
     private void checkForRowCol(int row, int col) {
-        if (row >= grid.length || col >= grid.length) {
+        if (row >= grid.length || col >= grid.length || row < 0 || col < 0) {
             throw new java.lang.IndexOutOfBoundsException();
-        }
-        if (row < 0 || col < 0) {
-            throw new java.lang.IllegalArgumentException();
         }
     }
 
@@ -114,13 +122,7 @@ public class Percolation {
      * does the system percolate?
      */
     public boolean percolates() {
-        int i = grid.length - 1;
-        for (int j = 0; j < grid.length; j++) {
-            if (isFull(i, j)) {
-                return true;
-            }
-        }
-        return false;
+        return isPercolates;
     }
 
     /**

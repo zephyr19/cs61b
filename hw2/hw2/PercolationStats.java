@@ -33,7 +33,7 @@ public class PercolationStats {
         for (int site : sites) {
             sum += Math.pow(site - mean, 2);
         }
-        stddev = Math.sqrt((double) sum / (T - 1));
+        stddev = Math.sqrt((double) sum / (T - 1) / N / N);
     }
 
     /**
@@ -62,11 +62,5 @@ public class PercolationStats {
      */
     public double confidenceHigh() {
         return mean + 1.96 * stddev / Math.sqrt(sites.length);
-    }
-
-    public static void main(String[] args) {
-        PercolationFactory pf = new PercolationFactory();
-        PercolationStats p = new PercolationStats(5, 5, pf);
-        double mean = p.mean();
     }
 }

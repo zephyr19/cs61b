@@ -47,7 +47,7 @@ public class Percolation {
                             unionUF.union(position, position + grid.length);
                         }
                     } else {
-                        if (isFirst) {
+                        if (isFirst || !percolates()) {
                             unionUF.union(position, sizeForUnion + 1);
                             isFirst = false;
                         }
@@ -61,7 +61,7 @@ public class Percolation {
                             unionUF.union(position, position + grid.length);
                         }
                     } else {
-                        if (isFirst) {
+                        if (isFirst || !percolates()) {
                             unionUF.union(position, sizeForUnion + 1);
                             isFirst = false;
                         }
@@ -132,7 +132,7 @@ public class Percolation {
      * does the system percolate?
      */
     public boolean percolates() {
-        return unionUF.connected(sizeForUnion, sizeForUnion);
+        return unionUF.connected(sizeForUnion, sizeForUnion + 1);
     }
 
     /**

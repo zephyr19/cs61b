@@ -12,6 +12,9 @@ public class Percolation {
      * create N-by-N grid, with all sites initially blocked.
      */
     public Percolation(int N) {
+        if (N <= 0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         grid = new int[N][N];
         openSites = 0;
         sizeForUnion = N * N;
@@ -27,43 +30,45 @@ public class Percolation {
             int position = row * grid.length + col;
             int border = grid.length - 1;
             openSites++;
-            if (row != 0 && col != 0 && col != border) {
-                if (isOpenWithoutChecking(row, col + 1)) {
-                    unionUF.union(position, position + 1);
-                }
-                if (isOpenWithoutChecking(row, col - 1)) {
-                    unionUF.union(position, position - 1);
-                }
-                if (isOpenWithoutChecking(row - 1, col)) {
-                    unionUF.union(position, position - grid.length);
-                }
-                if (row != border) {
-                    if (isOpenWithoutChecking(row + 1, col)) {
-                        unionUF.union(position, position + grid.length);
-                    }
-                }
-            } else if (row != 0) {
-                if (isOpenWithoutChecking(row - 1, col)) {
-                    unionUF.union(position, position - grid.length);
-                }
-                if (row != border) {
-                    if (isOpenWithoutChecking(row + 1, col)) {
-                        unionUF.union(position, position + grid.length);
-                    }
-                }
-                if (col == 0) {
+            if(grid.length != 1) {
+                if (row != 0 && col != 0 && col != border) {
                     if (isOpenWithoutChecking(row, col + 1)) {
                         unionUF.union(position, position + 1);
                     }
-                } else {
                     if (isOpenWithoutChecking(row, col - 1)) {
                         unionUF.union(position, position - 1);
                     }
-                }
-            } else {
-                unionUF.union(position, sizeForUnion);
-                if (isOpenWithoutChecking(row + 1, col)) {
-                    unionUF.union(position, position + grid.length);
+                    if (isOpenWithoutChecking(row - 1, col)) {
+                        unionUF.union(position, position - grid.length);
+                    }
+                    if (row != border) {
+                        if (isOpenWithoutChecking(row + 1, col)) {
+                            unionUF.union(position, position + grid.length);
+                        }
+                    }
+                } else if (row != 0) {
+                    if (isOpenWithoutChecking(row - 1, col)) {
+                        unionUF.union(position, position - grid.length);
+                    }
+                    if (row != border) {
+                        if (isOpenWithoutChecking(row + 1, col)) {
+                            unionUF.union(position, position + grid.length);
+                        }
+                    }
+                    if (col == 0) {
+                        if (isOpenWithoutChecking(row, col + 1)) {
+                            unionUF.union(position, position + 1);
+                        }
+                    } else {
+                        if (isOpenWithoutChecking(row, col - 1)) {
+                            unionUF.union(position, position - 1);
+                        }
+                    }
+                } else {
+                    unionUF.union(position, sizeForUnion);
+                    if (isOpenWithoutChecking(row + 1, col)) {
+                        unionUF.union(position, position + grid.length);
+                    }
                 }
             }
         }

@@ -62,6 +62,9 @@ public class Percolation {
                 }
             } else {
                 unionUF.union(position, sizeForUnion);
+                if (isOpenWithoutChecking(row + 1, col)) {
+                    unionUF.union(position, position + grid.length);
+                }
             }
         }
     }

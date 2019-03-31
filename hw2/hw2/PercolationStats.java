@@ -15,17 +15,13 @@ public class PercolationStats {
         sites = new int[T];
         int totalSites = 0;
         for (int i = 0; i < T; i++) {
-            int n = N * N + 1;
-            for (int j = 1; j < n; j++) {
-                Percolation percolation = pf.make(N);
+            Percolation percolation = pf.make(N);
+            for (int j = 1; !percolation.percolates(); j++) {
                 while (percolation.numberOfOpenSites() != j) {
                     percolation.open(StdRandom.uniform(N), StdRandom.uniform(N));
                 }
-                if (percolation.percolates()) {
-                    totalSites += j;
-                    sites[i] = j;
-                    break;
-                }
+                totalSites += j;
+                sites[i] = j;
             }
         }
         mean = (double) totalSites / T;

@@ -76,6 +76,7 @@ public class Percolation {
                 }
             } else {
                 unionUF.union(position, sizeForUnion);
+                unionUF.union(position, sizeForUnion + 1);
             }
         }
     }

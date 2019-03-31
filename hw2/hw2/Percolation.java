@@ -7,7 +7,6 @@ public class Percolation {
     private int openSites;
     private WeightedQuickUnionUF unionUF;
     private int sizeForUnion;
-//    private boolean isPercolates;
 
     /**
      * create N-by-N grid, with all sites initially blocked.
@@ -19,7 +18,7 @@ public class Percolation {
         grid = new int[N][N];
         openSites = 0;
         sizeForUnion = N * N;
-        unionUF = new WeightedQuickUnionUF(sizeForUnion + 1);
+        unionUF = new WeightedQuickUnionUF(sizeForUnion + 1 + 1);
     }
 
     /**
@@ -28,7 +27,7 @@ public class Percolation {
     public void open(int row, int col) {
         if (!isOpen(row, col)) {
             grid[row][col] = 1;
-            int position = row * grid.length + col;
+            int position = xyTo1D(row, col);
             int border = grid.length - 1;
             openSites++;
             if (grid.length != 1) {
@@ -46,6 +45,8 @@ public class Percolation {
                         if (isOpenWithoutChecking(row + 1, col)) {
                             unionUF.union(position, position + grid.length);
                         }
+                    } else {
+                        unionUF.union(position, sizeForUnion + 1);
                     }
                 } else if (row != 0) {
                     if (isOpenWithoutChecking(row - 1, col)) {
@@ -55,6 +56,8 @@ public class Percolation {
                         if (isOpenWithoutChecking(row + 1, col)) {
                             unionUF.union(position, position + grid.length);
                         }
+                    } else {
+                        unionUF.union(position, sizeForUnion + 1);
                     }
                     if (col == 0) {
                         if (isOpenWithoutChecking(row, col + 1)) {
@@ -100,7 +103,14 @@ public class Percolation {
      */
     public boolean isFull(int row, int col) {
         checkForRowCol(row, col);
-        return unionUF.connected(row * grid.length + col, sizeForUnion);
+        return unionUF.connected(xyTo1D(row, col), sizeForUnion);
+    }
+
+    /**
+     * returns the one dimensional position with row and col.
+     */
+    private int xyTo1D(int row, int col) {
+        return row * grid.length + col;
     }
 
     /**
@@ -114,15 +124,7 @@ public class Percolation {
      * does the system percolate?
      */
     public boolean percolates() {
-        int i = grid.length - 1;
-        for (int j = 0; j < grid.length; j++) {
-            if (isOpenWithoutChecking(i, j)) {
-                if (unionUF.connected(i * grid.length + j, sizeForUnion)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return unionUF.connected(sizeForUnion, sizeForUnion + 1);
     }
 
     /**

@@ -28,7 +28,9 @@ public class Percolation {
         init();
     }
 
-    /** Initialize uf. */
+    /**
+     * Initialize uf.
+     */
     private void init() {
         for (int i = 0; i < N; i++) {
             antiBackWash.union(i, virtualTop);
@@ -75,7 +77,7 @@ public class Percolation {
                 if (neighbour != -1 && grid[neighbour]) {
                     antiBackWash.union(position, neighbour);
                     unionUF.union(position, neighbour);
-                    if (position >= 0 && position <N) {
+                    if (position >= 0 && position < N) {
                         unionUF.union(position, virtualTop);
                     }
                 }
@@ -103,7 +105,7 @@ public class Percolation {
     public boolean isFull(int row, int col) {
         checkForRowCol(row, col);
         int position = xyTo1D(row, col);
-        return unionUF.connected(position, virtualTop) && antiBackWash.connected(position, virtualTop);
+        return isOpen(row, col) && antiBackWash.connected(position, virtualTop);
     }
 
     /**

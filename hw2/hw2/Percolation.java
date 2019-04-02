@@ -46,6 +46,9 @@ public class Percolation {
      */
     private int[] neighbour(int row, int col) {
         int[] neighbour = {-1, -1, -1, -1}; // neighbour[0] top; [1] right; [2] bottom; [3] left.
+        if (row == 0) {
+            neighbour[0] = xyTo1D(row, col); // if only one row, add itself.
+        }
         if (row > 0 && row != N - 1) {
             neighbour[0] = xyTo1D(row - 1, col);
             neighbour[2] = xyTo1D(row + 1, col);

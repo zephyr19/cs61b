@@ -77,7 +77,7 @@ public class Percolation {
                 if (neighbour != -1 && grid[neighbour]) {
                     antiBackWash.union(position, neighbour);
                     unionUF.union(position, neighbour);
-                    if (position >= 0 && position < N) {
+                    if (antiBackWash.connected(position, virtualTop)) {
                         unionUF.union(position, virtualTop);
                     }
                 }

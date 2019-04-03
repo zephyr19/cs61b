@@ -17,56 +17,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }
     }
 
-//    private class iteratorMap implements Iterator<K> {
-//        private Node next;
-//        private Node Max;
-//
-//        private iteratorMap() {
-//            Node node = root;
-//            Node preNode = root;
-//            while (node != null) {
-//                preNode = node;
-//                node = node.left;
-//            }
-//            next = preNode;
-//            node = root;
-//            while (node != null) {
-//                preNode = node;
-//                node = node.right;
-//            }
-//            Max = preNode;
-//        }
-//
-//        @Override
-//        public boolean hasNext() {
-//            return !next.equals(Max);
-//        }
-//
-//        @Override
-//        public K next() {
-//            Node node = root, preNode = null, doublePreNode = null;
-//            while (true) {
-//                int cmp = next.key.compareTo(node.key);
-//                if (cmp != 0) {
-//                    doublePreNode = preNode;
-//                    preNode = node;
-//                    if (cmp < 0) node = next.left;
-//                    else node = next.right;
-//                } else break;
-//            }
-//            if (node.left == null && node.right == null) {
-//                if (preNode.key.compareTo(node.key) > 0) {
-//                    next = preNode;
-//                } else {
-//                    next = doublePreNode;
-//                }
-//            } else if (node.left != null && node.right != null) {
-//                next = node.right;
-//            }
-//            return next.key;
-//        }
-//    }
-
     private Node root;
     private Set<K> set = new TreeSet<>();
 

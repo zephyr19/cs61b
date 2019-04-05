@@ -37,6 +37,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         size = 0;
         keySet = new HashSet<>();
         buckets = new LinkedList[initialSize];
+        for (int i = 0; i < initialSize; i++) {
+            buckets[i] = new LinkedList<>();
+        }
     }
 
     public MyHashMap(int initialSize) {
@@ -44,6 +47,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         this.initialSize = initialSize;
         keySet = new HashSet<>();
         buckets = new LinkedList[initialSize];
+        for (int i = 0; i < initialSize; i++) {
+            buckets[i] = new LinkedList<>();
+        }
     }
 
     public MyHashMap(int initialSize, double loadFactor) {
@@ -52,6 +58,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         this.initialSize = initialSize;
         keySet = new HashSet<>();
         buckets = new LinkedList[initialSize];
+        for (int i = 0; i < initialSize; i++) {
+            buckets[i] = new LinkedList<>();
+        }
     }
 
     /** Removes all of the mappings from this map. */
@@ -60,6 +69,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         size = 0;
         keySet.clear();
         buckets = new LinkedList[initialSize];
+        for (int i = 0; i < initialSize; i++) {
+            buckets[i] = new LinkedList<>();
+        }
     }
 
     /** Returns true if this map contains a mapping for the specified key. */
@@ -77,11 +89,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         if (!containsKey(key)) {
             return null;
         }
-        int index = key.hashCode() / buckets.length;
-        int n = buckets[index].size();
-        for (int i = 0; i < n; i++) {
-            Node node = buckets[index].get(i);
-            if (node.key == key) {
+        int index = (key.hashCode() & 0x7FFFFFFF) % buckets.length;
+        for (Node node : buckets[index]) {
+            if (node.key.equals(key)) {
                 return node.value;
             }
         }
@@ -101,20 +111,42 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public void put(K key, V value) {
-        int index = key.hashCode() / buckets.length;
+        if (value == null) {
+            return;
+        }
         if (containsKey(key)) {
+            int index = (key.hashCode() & 0x7FFFFFFF) % buckets.length;
             int n = buckets[index].size();
             for (int i = 0; i < n; i++) {
                 Node node = buckets[index].get(i);
-                if (node.key == key) {
+                if (node.key.equals(key)) {
                     node.value = value;
                     break;
                 }
             }
         } else {
+            ifOverLoad();
+            int index = (key.hashCode() & 0x7FFFFFFF) % buckets.length;
             buckets[index].add(new Node(key, value));
             keySet.add(key);
             size++;
+        }
+    }
+
+    /** Expend buckets if the radio of size and buckets' length larger than loadFactor. */
+    private void ifOverLoad() {
+        if ((double) size / buckets.length > loadFactor) {
+            LinkedList<Node>[] newBuckets = new LinkedList[buckets.length * 2];
+            for (int i = 0; i < newBuckets.length; i++) {
+                newBuckets[i] = new LinkedList<>();
+            }
+            for (LinkedList<Node> list : buckets) {
+                for (Node node : list) {
+                    int index = (node.key.hashCode() & 0x7FFFFFFF) % newBuckets.length;
+                    newBuckets[index].add(node);
+                }
+            }
+            buckets = newBuckets;
         }
     }
 

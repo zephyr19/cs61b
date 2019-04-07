@@ -1,5 +1,6 @@
 package bearmaps;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -15,41 +16,12 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         }
     }
 
-    private class keyNode {
-        T item;
-        int index;
-
-        private keyNode(T e, int i) {
-            item = e;
-            index = i;
-        }
-
-        @Override
-        public int hashCode() {
-            return item.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o == null) {
-                return false;
-            }
-            if (this.getClass() != o.getClass()) {
-                return false;
-            }
-            if (this == o) {
-                return true;
-            }
-            return item.equals(((keyNode) o).item);
-        }
-    }
-
     private PriorityNode[] array;
-    private Set<keyNode> key;
+    private Set<T> key;
     private int size;
 
     public ArrayHeapMinPQ() {
-        array = (PriorityNode[]) new Object[8];
+        array = new ArrayHeapMinPQ.PriorityNode[8];
         key = new LinkedHashSet<>();
         size = 0;
     }
@@ -66,30 +38,24 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             resize();
         }
         array[size] = new PriorityNode(item, priority);
-        key.add(new keyNode(item, size));
+        key.add(item);
         swim(size);
         size++;
     }
 
     /* If size is larger than 3/4s array.length. resize the array in double size. */
     private void resize() {
-        PriorityNode[] temp = (PriorityNode[]) new Object[array.length * 2];
+        PriorityNode[] temp = new ArrayHeapMinPQ.PriorityNode[array.length * 2];
         System.arraycopy(array, 0, temp, 0, array.length);
         array = temp;
     }
 
     /* Help item go to the right position. */
     private void swim(int i) {
-        while (i > 0 && greater(i, parent(i))) {
+        while (i > 0 && smaller(i, parent(i))) {
             int parent = parent(i);
-            T parentItem = array[parent].item;
-            T item = array[i].item;
             exchange(i, parent);
             i = parent;
-            key.remove(new keyNode(parentItem, 0));
-            key.add(new keyNode(parentItem, i));
-            key.remove(new keyNode(item, 0));
-            key.add(new keyNode(item, parent));
         }
     }
 
@@ -100,9 +66,9 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         array[j] = swap;
     }
 
-    /* Return true if i is priority. */
-    private boolean greater(int i, int j) {
-        return array[i].priority - array[j].priority > 0;
+    /* Return true if i is less priority. */
+    private boolean smaller(int i, int j) {
+        return array[i].priority - array[j].priority < 0;
     }
 
     /* Return the parent index of i. */
@@ -113,7 +79,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     /* Returns true if the PQ contains the given item. */
     @Override
     public boolean contains(T item) {
-        return key.contains(new keyNode(item, 0));
+        return key.contains(item);
     }
 
     /* Returns the minimum item. Throws NoSuchElementException if the PQ is empty. */
@@ -129,11 +95,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     @Override
     public T removeSmallest() {
         T res = getSmallest();
-        key.remove(new keyNode(res, 0));
         array[0] = array[size - 1];
-        T item = array[0].item;
-        key.remove(new keyNode(item, 0));
-        key.add(new keyNode(item, 0));
         size--;
         sink(0);
         return res;
@@ -141,16 +103,10 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
     /* Help item go to the right position. */
     private void sink(int i) {
-        while (i < size && greater(child(i), i)) {
+        while (i < size && smaller(child(i), i)) {
             int child = child(i);
-            T item = array[i].item;
-            T childItem = array[child].item;
             exchange(child, i);
             i = child;
-            key.remove(new keyNode(item, 0));
-            key.add(new keyNode(item, child));
-            key.remove(new keyNode(childItem, 0));
-            key.add(new keyNode(childItem, i));
         }
     }
 

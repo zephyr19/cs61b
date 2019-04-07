@@ -1,9 +1,6 @@
 package bearmaps;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     private class PriorityNode {
@@ -17,12 +14,12 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     }
 
     private PriorityNode[] array;
-    private Set<T> key;
+    private Map<T, Integer> key;
     private int size;
 
     public ArrayHeapMinPQ() {
         array = new ArrayHeapMinPQ.PriorityNode[8];
-        key = new LinkedHashSet<>();
+        key = new HashMap<>();
         size = 0;
     }
 
@@ -38,7 +35,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             resize();
         }
         array[size] = new PriorityNode(item, priority);
-        key.add(item);
+        key.put(item, size);
         swim(size);
         size++;
     }
@@ -64,6 +61,12 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         PriorityNode swap = array[i];
         array[i] = array[j];
         array[j] = swap;
+        T item1 = array[i].item;
+        T item2 = array[j].item;
+        key.remove(item1);
+        key.put(item1, j);
+        key.remove(item2);
+        key.put(item2, i);
     }
 
     /* Return true if i is less priority. */
@@ -79,7 +82,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     /* Returns true if the PQ contains the given item. */
     @Override
     public boolean contains(T item) {
-        return key.contains(item);
+        return key.containsKey(item);
     }
 
     /* Returns the minimum item. Throws NoSuchElementException if the PQ is empty. */
@@ -95,6 +98,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     @Override
     public T removeSmallest() {
         T res = getSmallest();
+        key.remove(res);
         array[0] = array[size - 1];
         size--;
         sink(0);
@@ -133,5 +137,9 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (!contains(item)) {
             throw new NoSuchElementException("The item is not in the priority queue. You should add it first.");
         }
+        int index = key.get(item);
+        array[index].priority = priority;
+        swim(index);
+        sink(index);
     }
 }

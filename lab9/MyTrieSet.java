@@ -1,18 +1,17 @@
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class MyTrieSet implements TrieSet61B {
-    private static final int R = 256;   //extended ASCII
-
     private Node root;  //root of trie
 
     public class Node {
         private boolean mark;
-        private Node[] next;
+        private HashMap<Character, Node> next;
 
         public Node() {
             mark = false;
-            next = new Node[R];
+            next = new HashMap<>();
         }
     }
 
@@ -51,28 +50,37 @@ public class MyTrieSet implements TrieSet61B {
         if (index == key.length()) {
             return node;
         }
-        return get(node.next[key.charAt(index)], key, index + 1);
+        return get(node.next.get(key.charAt(index)), key, index + 1);
     }
 
     /** Inserts string KEY into Trie */
     @Override
     public void add(String key) {
         if (!contains(key)) {
-            root = add(root, key, 0);
+            Node node = root;
+            int i = 0;
+            for (int n = key.length(); i < n; i++) {
+                char ch = key.charAt(i);
+                if (!node.next.containsKey(ch)) {
+                    break;
+                }
+                node = node.next.get(ch);
+            }
+            add(node, key, i);
         }
     }
 
-    private Node add(Node node, String key, int index) {
+    private void add(Node node, String key, int index) {
         if (node == null) {
             node = new Node();
         }
         if (index == key.length()) {
             node.mark = true;
-            return node;
+            return;
         }
         char n = key.charAt(index);
-        node.next[n] = add(node.next[n], key, index + 1);
-        return node;
+        node.next.put(n, new Node());
+        add(node.next.get(n), key, index + 1);
     }
 
     /** Returns a list of all words that start with PREFIX */
@@ -86,7 +94,17 @@ public class MyTrieSet implements TrieSet61B {
             return null;
         }
         List<String> res = new LinkedList<>();
-//        keysWithPrefix(prefix, res, node);
+        keysWithPrefixHelper(prefix, res, node);
+        return res;
+    }
+
+    private void keysWithPrefixHelper(String key, List<String> list, Node node) {
+        for (char ch : node.next.keySet()) {
+            keysWithPrefixHelper(key + ch, list, node.next.get(ch));
+        }
+        if (node.mark) {
+            list.add(key);
+        }
     }
 
     /** Returns the longest prefix of KEY that exists in the Trie

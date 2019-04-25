@@ -27,7 +27,7 @@ public class FlightSolver extends PriorityQueue {
 
     @Override
     public Comparator<Flight> comparator() {
-        return new Comparator<Flight>() {
+        return new Comparator<>() {
             @Override
             public int compare(Flight o1, Flight o2) {
                 return o1.passengers() - o2.passengers();

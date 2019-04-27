@@ -5,10 +5,9 @@ import java.util.*;
 public class SeparableEnemySolver {
 
     Graph g;
-    Set<String> labels;
-    Set<String> neighbors;
-    Set<String> group1;
-    Set<String> group2;
+    private Set<String> labels;
+    private Set<String> group1;
+    private Set<String> group2;
 
     /**
      * Creates a SeparableEnemySolver for a file with name filename. Enemy
@@ -16,59 +15,64 @@ public class SeparableEnemySolver {
      */
     SeparableEnemySolver(String filename) throws java.io.FileNotFoundException {
         this.g = graphFromFile(filename);
-        labels = g.labels();
-        Set<String> group1 = new HashSet<>();
-        Set<String> group2 = new HashSet<>();
+        labels = new HashSet<>();
+        labels.addAll(g.labels());
+        group1 = new HashSet<>();
+        group2 = new HashSet<>();
     }
 
-    /** Alterntive constructor that requires a Graph object. */
+    /**
+     * Alterntive constructor that requires a Graph object.
+     */
     SeparableEnemySolver(Graph g) {
         this.g = g;
-        labels = g.labels();
-        Set<String> group1 = new HashSet<>();
-        Set<String> group2 = new HashSet<>();
+        labels = new HashSet<>();
+        labels.addAll(g.labels());
+        group1 = new HashSet<>();
+        group2 = new HashSet<>();
     }
 
     /**
      * Returns true if input is separable, false otherwise.
      */
     public boolean isSeparable() {
-//        String[] labelsString = (String[]) labels.toArray();
-//        for (int i = 0; i < labelsString.length; i++) {
-//            String label = labelsString[i];
-//            if (labels.contains(label)) {
-//                labels.remove(label);
-//                group1.add(label);
-//                Set<String> neighbors = g.neighbors(label);
-//            }
-//        }
-
-
-
-//        for (String label : labels) {
-//            Set<String> neighbors = g.neighbors(label);
-//            if (!group2.contains(label)) {
-//                group1.add(label);
-//                for (String neighbor : neighbors) {
-//                    if (!group1.contains(neighbor)) {
-//                        group2.add(neighbor);
-//                    }
-//                }
-//            } else {
-//                for (String neighbor : neighbors) {
-//                    if (group2.contains(neighbor)) {
-//                        return false;
-//                    } else {
-//                        group1.add(neighbor);
-//                    }
-//                }
-//            }
-//        }
-        return false;
+        boolean[] flag = {true};
+        while (!labels.isEmpty()) {
+            String label = labels.iterator().next();
+            group1.add(label);  // Randomly add one label to a group.
+            split(label, flag);
+            if (!flag[0]) { // Then split the remain labels into two groups.
+                return false;
+            }
+        }
+        return true;
     }
 
-    private void split(String label) {
-        if ()
+    private void split(String label, boolean[] flag) {
+        if (labels.contains(label)) {
+            labels.remove(label);
+            if (group1.contains(label)) {
+                Set<String> neighbors = g.neighbors(label);
+                for (String neighbor : neighbors) {
+                    if (group1.contains(neighbor)) {
+                        flag[0] = false;
+                    } else {
+                        group2.add(neighbor);
+                        split(neighbor, flag);
+                    }
+                }
+            } else {
+                Set<String> neighbors = g.neighbors(label);
+                for (String neighbor : neighbors) {
+                    if (group2.contains(neighbor)) {
+                        flag[0] = false;
+                    } else {
+                        group1.add(neighbor);
+                        split(neighbor, flag);
+                    }
+                }
+            }
+        }
     }
 
 
@@ -89,7 +93,7 @@ public class SeparableEnemySolver {
                 }
                 continue;
             }
-            assert(lines.get(i).size() == 2);
+            assert (lines.get(i).size() == 2);
             input.connect(lines.get(i).get(0), lines.get(i).get(1));
         }
         return input;

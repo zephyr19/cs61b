@@ -60,5 +60,4 @@ public class SeparableEnemySolverTests {
         SeparableEnemySolver solver = new SeparableEnemySolver("input/party4");
         assertEquals(false, solver.isSeparable());
     }
-
 }

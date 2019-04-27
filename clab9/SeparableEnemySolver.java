@@ -5,6 +5,10 @@ import java.util.*;
 public class SeparableEnemySolver {
 
     Graph g;
+    Set<String> labels;
+    Set<String> neighbors;
+    Set<String> group1;
+    Set<String> group2;
 
     /**
      * Creates a SeparableEnemySolver for a file with name filename. Enemy
@@ -12,19 +16,59 @@ public class SeparableEnemySolver {
      */
     SeparableEnemySolver(String filename) throws java.io.FileNotFoundException {
         this.g = graphFromFile(filename);
+        labels = g.labels();
+        Set<String> group1 = new HashSet<>();
+        Set<String> group2 = new HashSet<>();
     }
 
     /** Alterntive constructor that requires a Graph object. */
     SeparableEnemySolver(Graph g) {
         this.g = g;
+        labels = g.labels();
+        Set<String> group1 = new HashSet<>();
+        Set<String> group2 = new HashSet<>();
     }
 
     /**
      * Returns true if input is separable, false otherwise.
      */
     public boolean isSeparable() {
-        // TODO: Fix me
+//        String[] labelsString = (String[]) labels.toArray();
+//        for (int i = 0; i < labelsString.length; i++) {
+//            String label = labelsString[i];
+//            if (labels.contains(label)) {
+//                labels.remove(label);
+//                group1.add(label);
+//                Set<String> neighbors = g.neighbors(label);
+//            }
+//        }
+
+
+
+//        for (String label : labels) {
+//            Set<String> neighbors = g.neighbors(label);
+//            if (!group2.contains(label)) {
+//                group1.add(label);
+//                for (String neighbor : neighbors) {
+//                    if (!group1.contains(neighbor)) {
+//                        group2.add(neighbor);
+//                    }
+//                }
+//            } else {
+//                for (String neighbor : neighbors) {
+//                    if (group2.contains(neighbor)) {
+//                        return false;
+//                    } else {
+//                        group1.add(neighbor);
+//                    }
+//                }
+//            }
+//        }
         return false;
+    }
+
+    private void split(String label) {
+        if ()
     }
 
 

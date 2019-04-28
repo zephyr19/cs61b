@@ -13,7 +13,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         }
     }
 
-    private PriorityNode[] array;
+    public PriorityNode[] array;    //********************
     private Map<T, Integer> key;
     private int size;
 
@@ -64,9 +64,9 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         T item1 = array[i].item;
         T item2 = array[j].item;
         key.remove(item1);
-        key.put(item1, j);
+        key.put(item1, i);
         key.remove(item2);
-        key.put(item2, i);
+        key.put(item2, j);
     }
 
     /* Return true if i is less priority. */
@@ -116,7 +116,20 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
     /* Return a child of i. */
     private int child(int i) {
-        return (i + 1) * 2;
+        int rightChild =  (i + 1) * 2;
+        int leftChild = rightChild - 1;
+        if (leftChild >= size) {
+            return i;       // avoid NullPoint if both children are null.
+        } else if (rightChild >= size) {
+            return leftChild;   // only leftChild is valid.
+        } else {
+            // return the smaller priority one
+            if (smaller(leftChild, rightChild)) {
+                return leftChild;
+            } else {
+                return rightChild;
+            }
+        }
     }
 
     /* Returns the number of items in the PQ. */
@@ -140,6 +153,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         int index = key.get(item);
         array[index].priority = priority;
         swim(index);
+        index = key.get(item);
         sink(index);
     }
 }

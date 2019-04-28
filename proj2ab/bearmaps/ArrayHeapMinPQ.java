@@ -13,7 +13,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         }
     }
 
-    public PriorityNode[] array;    //********************
+    private PriorityNode[] array;    //********************
     private Map<T, Integer> key;
     private int size;
 
@@ -29,7 +29,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     @Override
     public void add(T item, double priority) {
         if (contains(item)) {
-            throw new IllegalArgumentException("The item was added once. You can use changePriority method");
+            throw new IllegalArgumentException();
         }
         if (size > array.length * 3 / 4) {
             resize();
@@ -148,7 +148,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     @Override
     public void changePriority(T item, double priority) {
         if (!contains(item)) {
-            throw new NoSuchElementException("The item is not in the priority queue. You should add it first.");
+            throw new NoSuchElementException();
         }
         int index = key.get(item);
         array[index].priority = priority;

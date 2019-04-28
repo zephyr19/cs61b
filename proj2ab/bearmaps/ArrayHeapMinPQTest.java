@@ -73,11 +73,25 @@ public class ArrayHeapMinPQTest {
     }
 
     @Test
-    public void print() {
+    public void ContainsTest() {
         ArrayHeapMinPQ<Integer> pq = new ArrayHeapMinPQ<>();
-        pq.add(5, 5);
-        pq.add(7, 7);
-        pq.add(2, 2);
-        PrintHeapDemo.printSimpleHeapDrawing(pq.array);
+        for (int i = 0; i < 100000; i++) {
+            pq.add(i, 100000 - i);
+        }
+        for (int i = 0; i < 100000; i++) {
+            assertEquals(true, pq.contains(i));
+        }
+        for (int i = 0; i < 100000; i++) {
+            pq.changePriority(i, i);
+        }
+        for (int i = 0; i < 100000; i++) {
+            assertEquals(true, pq.contains(i));
+        }
+        for (int i = 0; i < 1000; i++) {
+            pq.removeSmallest();
+        }
+        for (int i = 0; i < 1000; i++) {
+            assertEquals(false, pq.contains(i));
+        }
     }
 }

@@ -33,11 +33,11 @@ public class KDTree implements PointSet {
             if (point.getX() < node.x) {
                 node.left = add(node.left, point, false);
             } else {
-                node.right= add(node.right, point, false);
+                node.right = add(node.right, point, false);
             }
         } else {
             if (point.getY() < node.y) {
-                node.left = add(node.left, point,true);
+                node.left = add(node.left, point, true);
             } else {
                 node.right = add(node.right, point, true);
             }
@@ -54,7 +54,7 @@ public class KDTree implements PointSet {
     @Override
     public Point nearest(double x, double y) {
         distance = 10e5;
-        nearest(x, y,root);
+        nearest(x, y, root);
         if (best == null) {
             throw new IllegalCallerException();
         }

@@ -13,14 +13,12 @@ import edu.princeton.cs.algs4.StdRandom;
  */
 public class DemoIntegerHopPuzzleSolution {
     public static void main(String[] args) {
-        for (int i = 0; i < 100; i++) {
-            int start = StdRandom.uniform(0, 1000);
-            int goal = StdRandom.uniform(0, 1000);
+        int start = StdRandom.uniform(0, 2000);
+        int goal = StdRandom.uniform(0, 2000);
 
-            IntegerHopGraph ahg = new IntegerHopGraph();
+        IntegerHopGraph ahg = new IntegerHopGraph();
 
-            ShortestPathsSolver<Integer> solver = new AStarSolver<>(ahg, start, goal, 10);
-            SolutionPrinter.summarizeSolution(solver, " => ");
-        }
+        ShortestPathsSolver<Integer> solver = new AStarSolver<>(ahg, start, goal, 10);
+        SolutionPrinter.summarizeSolution(solver, " => ");
     }
 }

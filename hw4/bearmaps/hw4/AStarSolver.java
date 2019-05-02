@@ -62,7 +62,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
             solutionStack.push(v);
             while (true) {
                 v = edgeTo.get(v);
-                if (!v.equals(start)) {
+                if (!start.equals(v)) {
                     solutionStack.push(v);
                 } else {
                     break;

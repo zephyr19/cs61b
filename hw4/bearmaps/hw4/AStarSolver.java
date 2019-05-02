@@ -69,7 +69,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
                 }
             }
             solutionStack.push(start);
-            while (!solutionStack.isEmpty() ) {
+            while (!solutionStack.isEmpty()) {
                 solution.add(solutionStack.pop());
             }
         }
@@ -86,7 +86,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
             distTo.put(to, distTo.get(from) + weight);
             edgeTo.put(to, from);
             if (pq.contains(to)) {
-                pq.changePriority(to,distTo.get(to) + input.estimatedDistanceToGoal(from, to));
+                pq.changePriority(to, distTo.get(to) + input.estimatedDistanceToGoal(from, to));
             } else {
                 pq.add(to, distTo.get(to) + input.estimatedDistanceToGoal(from, to));
             }
@@ -97,6 +97,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
      * Should be SOLVED if the AStarSolver was able to complete all work in the time given
      * UNSOLVABLE if the priority queue became empty
      * TIMEOUT if the solver ran out of time
+     *
      * @return SOLVED or UNSOLVABLE or TIMEOUT
      */
     @Override
@@ -107,6 +108,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     /**
      * A list of vertices corresponding to a solution.
      * Should be empty if result was TIMEOUT or UNSOLVABLE
+     *
      * @return a list or null
      */
     @Override
@@ -117,6 +119,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     /**
      * The total weight of the given solution, taking into account edge weights.
      * Should be 0 if result was TIMEOUT or UNSOLVABLE
+     *
      * @return total weight or 0
      */
     @Override

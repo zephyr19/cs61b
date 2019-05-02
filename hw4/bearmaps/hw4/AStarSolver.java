@@ -8,7 +8,6 @@ import static bearmaps.hw4.SolverOutcome.*;
 
 public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     private SolverOutcome outcome;
-    private Stack<Vertex> solutionStack; // help to correct the order.
     private List<Vertex> solution;
     private double solutionWeight;
     private int numStatesExplored;
@@ -28,7 +27,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         distTo.put(start, 0.0);
         edgeTo = new HashMap<>();
         solution = new ArrayList<>();
-        solutionStack = new Stack<>();
+        Stack<Vertex> solutionStack = new Stack<>(); // help to correct the order.
         numStatesExplored = 0;
         pq = new ArrayHeapMinPQ<>();
         pq.add(start, input.estimatedDistanceToGoal(start, end));

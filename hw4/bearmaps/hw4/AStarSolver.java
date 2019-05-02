@@ -2,15 +2,13 @@ package bearmaps.hw4;
 
 import bearmaps.proj2ab.ArrayHeapMinPQ;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static bearmaps.hw4.SolverOutcome.*;
 
 public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     private SolverOutcome outcome;
+    private Stack<Vertex> solutionStack; // help to correct the order.
     private List<Vertex> solution;
     private double solutionWeight;
     private int numStatesExplored;
@@ -18,7 +16,6 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     private ArrayHeapMinPQ<Vertex> pq; // priority p = distTo[v] + h(v, goal)
     private HashMap<Vertex, Double> distTo;
     private HashMap<Vertex, Vertex> edgeTo;
-    private HashSet<Vertex> visited;
 
     /**
      * Constructor which finds the solution, computing everything necessary for all other methods
@@ -30,18 +27,17 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         distTo = new HashMap<>();
         distTo.put(start, 0.0);
         edgeTo = new HashMap<>();
-        solution = new LinkedList<>();
-        visited = new HashSet<>();
-        visited.add(start);
+        solution = new ArrayList<>();
+        solutionStack = new Stack<>();
         numStatesExplored = 0;
         pq = new ArrayHeapMinPQ<>();
         pq.add(start, input.estimatedDistanceToGoal(start, end));
         List<bearmaps.hw4.WeightedEdge<Vertex>> neighbors;
         while (!(pq.size() == 0 || pq.getSmallest().equals(end))) {
             Vertex vertex = pq.removeSmallest();
-//            if (System.currentTimeMillis() >= endTime) {
-//                break;
-//            }
+            if (System.currentTimeMillis() >= endTime) {
+                break;
+            }
             neighbors = input.neighbors(vertex);
             for (bearmaps.hw4.WeightedEdge<Vertex> vertexWeightedEdge : neighbors) {
                 relax(input, vertexWeightedEdge);
@@ -55,7 +51,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
             solutionWeight = 0;
         } else if (pq.size() == 0) {
             outcome = UNSOLVABLE;
-            explorationTime = timeout;
+            explorationTime = (System.currentTimeMillis() + timeout * 1000 - endTime) / 1000;
             solution.clear();
             solutionWeight = 0;
         } else {
@@ -63,27 +59,25 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
             explorationTime = (System.currentTimeMillis() + timeout * 1000 - endTime) / 1000;
             solutionWeight = distTo.get(end);
             Vertex v = end;
-            solution.add(v);
+            solutionStack.push(v);
             while (true) {
                 v = edgeTo.get(v);
                 if (!v.equals(start)) {
-                    solution.add(v);
+                    solutionStack.push(v);
                 } else {
                     break;
                 }
             }
-            solution.add(start);
+            solutionStack.push(start);
+            while (!solutionStack.isEmpty() ) {
+                solution.add(solutionStack.pop());
+            }
         }
     }
 
     private void relax(AStarGraph<Vertex> input, bearmaps.hw4.WeightedEdge<Vertex> vertex) {
         Vertex from = vertex.from();
         Vertex to = vertex.to();
-        if (visited.contains(to)) {
-            return;
-        } else {
-            visited.add(to);
-        }
         double weight = vertex.weight();
         if (!distTo.containsKey(to)) {
             distTo.put(to, 10e8);

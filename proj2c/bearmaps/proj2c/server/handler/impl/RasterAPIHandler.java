@@ -17,8 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static bearmaps.proj2c.utils.Constants.SEMANTIC_STREET_GRAPH;
-import static bearmaps.proj2c.utils.Constants.ROUTE_LIST;
+import static bearmaps.proj2c.utils.Constants.*;
 
 /**
  * Handles requests from the web browser for map images. These images
@@ -84,11 +83,64 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
      */
     @Override
     public Map<String, Object> processRequest(Map<String, Double> requestParams, Response response) {
-        //System.out.println("yo, wanna know the parameters given by the web browser? They are:");
-        //System.out.println(requestParams);
+        double lrlon = requestParams.get("lrlon");
+        double ullon = requestParams.get("ullon");
+        double ullat = requestParams.get("ullat");
+        double lrlat = requestParams.get("lrlat");
+        double w = requestParams.get("w");
         Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
-                + "your browser.");
+        // the box doesn't make any sense
+        // the box is completely outside of the ROOT image.
+        if (ullon > lrlon || ullat < lrlat ||
+                ullon > ROOT_LRLON || lrlon < ROOT_ULLON ||
+                ullat < ROOT_LRLAT || lrlat > ROOT_ULLAT) {
+            results.put("query_success", false);
+            return results;
+        }
+        double requestLonDPP = (lrlon - ullon) / w;
+        double LonDPP = (ROOT_LRLON - ROOT_ULLON) / TILE_SIZE;
+        int depth;
+        for (depth = 0; depth < 7; depth++) {   // depth from 0 to 7
+            if (LonDPP <= requestLonDPP) {
+                break;
+            }
+            LonDPP /= 2;
+        }
+        double lonDistPerTile = LonDPP * TILE_SIZE;
+        int boxNumOfEdge = (int) Math.pow(2, depth);
+        double latDistPerTile = (ROOT_ULLAT - ROOT_LRLAT) / boxNumOfEdge;
+        int leftMostTile = (int) Math.abs((ullon - ROOT_ULLON) / lonDistPerTile);
+        int rightMostTile = (int) Math.abs(((lrlon - ROOT_ULLON) / lonDistPerTile));
+        int upMostTile = (int) Math.abs(((ullat - ROOT_ULLAT) / latDistPerTile));
+        int downMostTile = (int) Math.abs(((lrlat - ROOT_ULLAT) / latDistPerTile));
+        if (rightMostTile > boxNumOfEdge) {
+            rightMostTile = boxNumOfEdge - 1;
+        }
+        if (downMostTile > boxNumOfEdge) {
+            downMostTile = boxNumOfEdge - 1;
+        }
+        String[][] imgFiles = new String[downMostTile - upMostTile + 1][rightMostTile - leftMostTile + 1];
+        for (int i = 0; i <= downMostTile - upMostTile; i++) {
+            int y = upMostTile + i;
+            for (int j = 0; j <= rightMostTile - leftMostTile; j++) {
+                int x = leftMostTile + j;
+                String string = "d" + depth + "_x" + x + "_y" + y + ".png";
+                imgFiles[i][j] = string;
+            }
+        }
+        double raster_ul_lon = ROOT_ULLON + leftMostTile * lonDistPerTile;
+        double raster_ul_lat = ROOT_ULLAT - upMostTile * latDistPerTile;
+        double raster_lr_lon = ROOT_ULLON + (rightMostTile + 1) * lonDistPerTile;
+        double raster_lr_lat = ROOT_ULLAT - (downMostTile + 1) * latDistPerTile;
+
+        // put everything into Map.
+        results.put("render_grid", imgFiles);
+        results.put("raster_ul_lon", raster_ul_lon);
+        results.put("raster_ul_lat", raster_ul_lat);
+        results.put("raster_lr_lon", raster_lr_lon);
+        results.put("raster_lr_lat", raster_lr_lat);
+        results.put("depth", depth);
+        results.put("query_success", true);
         return results;
     }
 
@@ -149,18 +201,18 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         int numVertTiles = renderGrid.length;
         int numHorizTiles = renderGrid[0].length;
 
-        BufferedImage img = new BufferedImage(numHorizTiles * Constants.TILE_SIZE,
-                numVertTiles * Constants.TILE_SIZE, BufferedImage.TYPE_INT_RGB);
+        BufferedImage img = new BufferedImage(numHorizTiles * TILE_SIZE,
+                numVertTiles * TILE_SIZE, BufferedImage.TYPE_INT_RGB);
         Graphics graphic = img.getGraphics();
         int x = 0, y = 0;
 
         for (int r = 0; r < numVertTiles; r += 1) {
             for (int c = 0; c < numHorizTiles; c += 1) {
                 graphic.drawImage(getImage(Constants.IMG_ROOT + renderGrid[r][c]), x, y, null);
-                x += Constants.TILE_SIZE;
+                x += TILE_SIZE;
                 if (x >= img.getWidth()) {
                     x = 0;
-                    y += Constants.TILE_SIZE;
+                    y += TILE_SIZE;
                 }
             }
         }

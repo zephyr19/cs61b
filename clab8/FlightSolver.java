@@ -22,16 +22,19 @@ public class FlightSolver extends PriorityQueue {
         if (res == null) {
             throw new IllegalCallerException();
         }
+        Comparator<Integer> intComparator = (i, j) -> i - j;
+        int cmp = intComparator.compare(1, 3);
         return res.passengers();
     }
 
     @Override
     public Comparator<Flight> comparator() {
-        return new Comparator<>() {
-            @Override
-            public int compare(Flight o1, Flight o2) {
-                return o1.passengers() - o2.passengers();
-            }
-        };
+//        return new Comparator<>() {
+//            @Override
+//            public int compare(Flight o1, Flight o2) {
+//                return o1.passengers() - o2.passengers();
+//            }
+//        };
+        return Comparator.comparingInt(Flight::passengers);
     }
 }

@@ -3,6 +3,7 @@ package bearmaps.proj2c;
 import bearmaps.hw4.WeightedEdge;
 import bearmaps.hw4.streetmap.Node;
 import bearmaps.hw4.streetmap.StreetMapGraph;
+import bearmaps.proj2ab.MyTrieSet;
 import bearmaps.proj2ab.Point;
 import bearmaps.proj2ab.WeirdPointSet;
 
@@ -20,14 +21,19 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
     List<Point> points;
     private WeirdPointSet pointSet;
     private Map<Point, Long> pointLongMap;
+    private MyTrieSet trieSet;
 
     public AugmentedStreetMapGraph(String dbPath) {
         super(dbPath);
         List<Node> nodes = this.getNodes();
         pointLongMap = new HashMap<>();
         points = new LinkedList<>();
+        trieSet = new MyTrieSet();
         for (Node node : nodes) {
             if (neighbors(node.id()).size() > 0) {
+                if (node.name() != null) {
+                    trieSet.add(node.name());
+                }
                 Point point = new Point(node.lon(), node.lat());
                 points.add(point);
                 pointLongMap.put(point, node.id());
@@ -59,7 +65,7 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      * cleaned <code>prefix</code>.
      */
     public List<String> getLocationsByPrefix(String prefix) {
-        return new LinkedList<>();
+        return trieSet.keysWithPrefix(prefix);
     }
 
     /**

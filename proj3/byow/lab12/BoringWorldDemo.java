@@ -5,7 +5,7 @@ import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
 /**
- *  Draws a world that is mostly empty except for a small region.
+ * Draws a world that is mostly empty except for a small region.
  */
 public class BoringWorldDemo {
     private static final int WIDTH = 60;
@@ -30,6 +30,12 @@ public class BoringWorldDemo {
                 world[x][y] = Tileset.WALL;
             }
         }
+
+//        for (int x = 25; x < 30; x++) {
+//            for (int y = 6; y < 9; y++) {
+//                world[x][y] = Tileset.FLOWER;
+//            }
+//        }
 
         // draws the world to the screen
         ter.renderFrame(world);

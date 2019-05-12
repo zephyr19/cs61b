@@ -1,7 +1,7 @@
 Q: Can you think of an analogy between the process of tesselating hexagons and randomly generating a world using rooms and hallways? 
 What is the hexagon and what is the tesselation on the Project 3 side?
 
-A:
+A: Well I don't know.
 
 -----
 Q: If you were to start working on world generation, what kind of method would you think of writing first? 
